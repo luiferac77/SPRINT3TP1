@@ -1,4 +1,4 @@
-import SuperHero from "../models/SuperHero.mjs";
+//import SuperHero from "../models/SuperHero.mjs";
 import { 
             obtenerSuperHeroePorId, 
             obtenerTodosLosSuperHeroes, 
@@ -10,9 +10,16 @@ import {
             eliminarSuperHeroPorNombre
         } from "../services/superHeroService.mjs";
 
-import { renderizarSuperHeroe, renderizarListaSuperHeroes, renderizarMensajeDeOperacion } from "../views/responseView.mjs";
+import { 
+            renderizarSuperHeroe, 
+            renderizarListaSuperHeroes, 
+            renderizarMensajeDeOperacion 
+        } from "../views/responseView.mjs";
+
+//import { validationResult } from "express-validator";
 
 export const obtenerSuperHeroePorIdController = async (req, res) => {
+
     const {id} = req.params;
     const superheroe = await obtenerSuperHeroePorId(id);
 
@@ -60,12 +67,25 @@ export const obtenerMayoresDe30Controller = async (req, res) => {
 }
 
 export const nuevoSuperHeroController = async (req, res) => {
+
+    //const errors = validationResult(req);
+    /*if(!errors.isEmpty()){
+        return res.status(400).send({
+            mensaje: "Error al validar los datos", 
+            errores: errors.array()
+        });
+    }*/
     try {
         const datosSuperHero = req.body;
         const superHero = await nuevoSuperHero(datosSuperHero);
-        res.status(201).send(renderizarSuperHeroe(superHero));
+        if(superHero){
+            res.send(renderizarSuperHeroe(superHero));
+        } else {
+            res.status(400).send({mensaje: "No se puedo insertar el superhéroe", error: error.message});    
+        }
+        
     } catch (error) {
-        res.status(400).send({mensaje: "error al inseta el nuevo superhéroe", error: error.message});     
+        res.status(400).send({mensaje: "error al insetar el nuevo superhéroe", error: error.message});     
     }
 }
 

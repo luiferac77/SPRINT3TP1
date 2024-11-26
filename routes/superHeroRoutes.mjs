@@ -1,4 +1,6 @@
 import express from 'express';
+import { validarSuperHeroe } from '../validators/superHeroValidator.mjs';
+import { handleValidationErrors } from '../validators/errorMiddleware.mjs';
 import { 
             obtenerSuperHeroePorIdController, 
             obtenerTodosLosSuperHeroesController, 
@@ -28,8 +30,8 @@ router.get('/heroes', obtenerTodosLosSuperHeroesController);
 
 
 //rutas de edición
-router.post('/heroes/nuevo', nuevoSuperHeroController);
-router.put('/heroes/actualizar/:id', actualizarSuperHeroController);
+router.post('/heroes/nuevo', validarSuperHeroe, handleValidationErrors, nuevoSuperHeroController);
+router.put('/heroes/actualizar/:id', validarSuperHeroe, handleValidationErrors, actualizarSuperHeroController);
 router.delete('/heroes/eliminar/:id', eliminarSuperHeroController);
 router.delete('/heroes/eliminarpornombre/:nombreReal', eliminarSuperHeroPorNombreController);
 
